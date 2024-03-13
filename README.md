@@ -11,7 +11,7 @@ This example uses the [Connexion](https://github.com/zalando/connexion) library 
 Python 3.5.2+
 
 ## Usage
-To run the server, please execute the following from the root directory:
+To run a microservice, please execute the following from its root directory:
 
 ```
 pip3 install -r requirements.txt
@@ -21,13 +21,13 @@ python3 -m swagger_server
 and open your browser to here:
 
 ```
-http://localhost:8080/ui/
+http://localhost:{microservice_port}/ui/
 ```
 
 Your Swagger definition lives here:
 
 ```
-http://localhost:8080/swagger.json
+http://localhost:{microservice_port}/swagger.json
 ```
 
 To launch the integration tests, use tox:
@@ -45,5 +45,5 @@ To run the server on a Docker container, please execute the following from the r
 docker build -t swagger_server .
 
 # starting up a container
-docker run -p 8080:8080 swagger_server
+docker run -p {microservice_port}:{microservice_port} swagger_server
 ```
