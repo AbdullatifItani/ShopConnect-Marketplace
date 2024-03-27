@@ -1,0 +1,8 @@
+venv/
+AuthMicroservice/__pycache__/
+UserMicroservice/__pycache__/
+UserMicroservice/model/__pycache__/
+AuthMicroservice/model/__pycache__/
+AuthMicroservice/db_config
+
+

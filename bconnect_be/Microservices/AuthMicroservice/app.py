@@ -77,15 +77,16 @@ def login():
 
 @app.route('/createuser', methods=['POST'])
 def create_user():
+    print(request.json)
     try:
         user_name = request.json["user_name"]
         email = request.json["email"]
         password = request.json["password"]
 
         auth = Auth(user_name, email, password)
-        user_id = auth.id
         db.session.add(auth)
         db.session.commit()
+        user_id = Auth.query.filter_by(user_name=user_name).first().id
         requests.post("http://localhost:8082/createUserInfo", json={'user_id': user_id})
         return jsonify(auth_schema.dump(auth)), 201
     except:

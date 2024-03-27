@@ -29,7 +29,6 @@ def getUserInfo():
 @app.route('/createUserInfo', methods=['POST'])
 def createUserInfo():
     user_id = request.json["user_id"]
-
     user = User(user_id, None, None)
     db.session.add(user)
     db.session.commit()
@@ -67,9 +66,6 @@ def editBioDesc():
     except Exception as e:
         abort(500)
     
-    return jsonify({"token": token}), 200
-
-
 @app.route('/editProfilePicture', methods=['POST'])
 def create_user():
     token = extract_auth_token(request)
