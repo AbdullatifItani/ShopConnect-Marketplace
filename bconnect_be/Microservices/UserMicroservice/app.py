@@ -19,11 +19,14 @@ def getUserInfo():
     token = extract_auth_token(request)
     try:
         response = requests.get("http://localhost:8080/authentication", headers = {'Authorization': f'Bearer {token}'})
-        user_id = response.json().get("success")
+        user = response.json()
+        userInfo = User.query.filter_by(user_id=user["id"]).first()
     except:
         abort(403)
-    user = User.query.filter_by(user_id=user_id).first()
-    return jsonify(user_schema.dump(user)), 200
+
+    return jsonify({"username": user["username"],
+                    "bio":userInfo.bio_desc,
+                    "profilePic":userInfo.profile_pic}), 200
     
    
 @app.route('/createUserInfo', methods=['POST'])
@@ -33,6 +36,18 @@ def createUserInfo():
     db.session.add(user)
     db.session.commit()
     return jsonify(user_schema.dump(user)), 201
+
+@app.route('/editBio', methods=['POST'])
+def editBio():
+    token = extract_auth_token(request)
+    response = requests.get("http://localhost:8080/authentication", headers = {'Authorization': f'Bearer {token}'})
+    user = response.json()
+    bio = request.json["bio"]
+    user2 = User.query.filter_by(user_id=user["id"]).first()
+    user2.bio_desc = bio
+    db.session.commit()
+    return jsonify({"message":"success"}),201
+
     
 
 
@@ -88,8 +103,6 @@ def create_user():
             abort(404)
     except Exception as e:
         abort(500)
-    
-    return jsonify({"token": token}), 200
     
 if __name__ == "__main__":
     app.run(port=8082)

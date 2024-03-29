@@ -54,11 +54,14 @@ def authentication():
     else:
         try:
             user_id = decode_token(token)
-            
-            return jsonify({"success": user_id})
+            user = Auth.query.filter_by(id=user_id).first()
+            username = user.user_name
+            return jsonify({"id": user_id,
+                            "username": username})
         except:
             abort(403)
-
+    
+    
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -93,5 +96,4 @@ def create_user():
         return jsonify({"message": "Username taken"}), 400
     
 if __name__ == "__main__":
-    # Specify the port using the port parameter
     app.run(port=8080)

@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
-import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
 import EditIcon from "@mui/icons-material/Edit";
 import Avatar from "@mui/material/Avatar";
 import "./ProfileViewerDialog.css";
@@ -15,87 +15,53 @@ export default function ProfileViewerDialog({
   title,
   submitText,
   initialUsername,
-  initialBioDesc
-
+  initialBioDesc,
+  initialProfilePic,
 }) {
-  let [username, setUsername] = useState(initialUsername);
-  let [bioDesc, setBioDesc] = useState(initialBioDesc);
-  let [profilePic, setProfilePic] = useState(null);
-  let [isEditing, setIsEditing] = useState(false);
+  let [modifiedBio, setBio2] = useState("");
+  let [editing, setEditing] = useState(false);
 
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
-
-  const handleSubmit = () => {
-    onSubmit(username, bioDesc, profilePic);
-    setIsEditing(false);
-  };
-
+  
+  
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
-      <div className="profile-dialog-container">
+      <div className="dialog-container">
         <DialogTitle>{title}</DialogTitle>
-        <div className="profile-info">
-          <div className="profile-pic-container">
-            <Avatar
-              alt={username}
-              src={profilePic}
-              className="profile-pic"
-            />
-            {isEditing && (
-              <IconButton
-                onClick={handleEditClick}
-                className="edit-icon"
-                aria-label="edit"
-              >
-                <EditIcon />
-              </IconButton>
-            )}
-          </div>
-          <div className="profile-details">
-            {!isEditing ? (
-              <>
-                <div className="info-item">
-                  <strong>Username:</strong> {username}
-                </div>
-                <div className="info-item">
-                  <strong>Bio Description:</strong> {bioDesc}
-                </div>
-              </>
-            ) : (
-              <>
-                <TextField
-                  fullWidth
-                  label="Username"
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  
-                />
-                <TextField
-                  fullWidth
-                  label="Bio Description"
-                  type="text"
-                  value={bioDesc}
-                  onChange={(e) => setBioDesc(e.target.value)}
-                />
-              </>
-            )}
-          </div>
+        <div className="form-item">
+          <Typography>
+            Username: {initialUsername}
+          </Typography>
         </div>
-        {isEditing && (
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={handleSubmit}
-            className="submit-btn"
-          >
-            {submitText}
-          </Button>
-        )}
+
+        <div className="form-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          {editing ? (
+            <>
+              <TextField
+                fullWidth
+                type = "text"
+                onChange={({target: {value}})=>setBio2(value)}
+              />
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={() => {onSubmit(modifiedBio);
+                                setEditing(false);}}
+            >
+                Save
+              </Button>
+            </>
+          ) : (
+            <>
+              <Typography>
+                Description: {initialBioDesc}
+              </Typography>
+              <Button onClick={() => setEditing(true)}>
+                <EditIcon />
+              </Button>
+            </>
+          )}
+        </div>
       </div>
     </Dialog>
   );
-  
 }
