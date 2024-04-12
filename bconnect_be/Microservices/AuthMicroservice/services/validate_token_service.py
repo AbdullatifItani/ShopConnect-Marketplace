@@ -5,15 +5,15 @@ from ..model.auth import Auth
 def validate_token():
     try:
         token = extract_auth_token(request)
-        if not token:
-            abort(403)
-
+        
+        if not token or token == "null":
+            return jsonify({"message":"No Token Provided"}), 400
         user_id = decode_token(token)
         user = Auth.query.filter_by(id=user_id).first()
         if not user:
-            abort(403)
+            return jsonify({"message":"Invalid Token"}), 403
 
         username = user.username
         return jsonify({"user_id": user_id}), 200
     except Exception as e:
-        return jsonify({"message": str(e)}), 400
+        return jsonify({"message": "Invalid Token"}), 403

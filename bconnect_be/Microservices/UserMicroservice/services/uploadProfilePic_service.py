@@ -10,20 +10,20 @@ def uploadProfilePic(db):
         response = requests.get("http://localhost:8080/validate_token", headers = {'Authorization': f'Bearer {token}'})
         user_id = response.json().get("user_id")
     except requests.RequestException as e:
-        abort(403)
+        return jsonify({"message" : "Unauthorized Request"}), 403
     except KeyError:
-        abort(403)
+        return jsonify({"message" : "Unauthorized Request"}), 403
     except:
-        abort(400)
+        return jsonify({"message" : "Bad Request"}), 400
     
     if "profile_pic" not in request.files:
-        abort(400)
+        return jsonify({"message" : "Bad Request"}), 400
         
     try:
         user = User.query.get(user_id)
 
         if not user:
-            abort(404)
+            return jsonify({"message" : "Not Found"}), 404
         
         profile_pic = request.files["profile_pic"]
         profile_pic_data = profile_pic.read()
@@ -31,6 +31,7 @@ def uploadProfilePic(db):
         user.profile_pic = encoded_image
         db.session.commit()
         return jsonify({"message": "Profile picture updated successfully."}), 201
-    except:
+    except Exception as e:
+        print(e)
         db.session.rollback()
         abort(500)

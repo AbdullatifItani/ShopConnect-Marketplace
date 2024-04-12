@@ -12,12 +12,12 @@ def login(bcrypt):
 
         user = Auth.query.filter_by(username=username).first()
         if not user:
-            abort(403)
+            return jsonify({"message":"Incorrect Username or Password"}), 403
 
         if not bcrypt.check_password_hash(user.hashed_password, password):
-            abort(403)
+            return jsonify({"message":"Incorrect Username or Password"}), 403
 
         token = create_token(user.id)
-        return jsonify({"token": token}), 200
+        return jsonify({"token": token, "user_id": user.id}), 200
     except Exception as e:
         return jsonify({"message": str(e)}), 400
