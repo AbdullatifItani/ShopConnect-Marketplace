@@ -1,6 +1,7 @@
 from ..helper_functions import extract_auth_token, decode_token
 from flask import abort, request, jsonify
 from ..model.auth import Auth
+import datetime
 
 def validate_token():
     try:
@@ -8,9 +9,9 @@ def validate_token():
         
         if not token or token == "null":
             return jsonify({"message":"No Token Provided"}), 400
-        user_id = decode_token(token)
+        user_id, exp, reset = decode_token(token)
         user = Auth.query.filter_by(id=user_id).first()
-        if not user:
+        if not user or datetime.datetime.utcnow() >= exp:
             return jsonify({"message":"Invalid Token"}), 403
 
         username = user.username

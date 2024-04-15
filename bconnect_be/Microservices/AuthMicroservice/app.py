@@ -16,7 +16,7 @@ bcrypt = Bcrypt(app)
 from .model.auth import Auth
 
 
-from .services import validate_token_service, login_service, register_service
+from .services import register_service, login_service, validate_token_service, forgot_pass_service, reset_pass_service
 
 
 @app.route('/register', methods=['POST'])
@@ -33,6 +33,13 @@ def login():
 def validate_token():
     return validate_token_service.validate_token()
 
+@app.route('/forgot_pass/<email>', methods=['POST'])
+def forgot_pass(email):
+    return forgot_pass_service.forgot_pass(email)
+
+@app.route('/reset_pass', methods=['POST'])
+def reset_pass():
+    return reset_pass_service.reset_pass(db, bcrypt)
     
 if __name__ == "__main__":
     app.run(port=8080)

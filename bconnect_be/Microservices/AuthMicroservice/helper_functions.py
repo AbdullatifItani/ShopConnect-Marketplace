@@ -3,18 +3,18 @@ import datetime
 
 SECRET_KEY = "b'|\xe7\xbfU3`\xc4\xec\xa7\xa9zf:}\xb5\xc7\xb9\x139^3@Dv'"
 
-def create_token(user_id):
+def create_token(user_id, delay=[4], isReset=False):
     payload = {
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=4),
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(*delay),
         'iat': datetime.datetime.utcnow(),
-        'sub': user_id
+        'sub': user_id,
+        'reset': isReset
     }
     return jwt.encode(
         payload,
         SECRET_KEY,
         algorithm='HS256'
     )
-
 
 def extract_auth_token(authenticated_request):
     auth_header = authenticated_request.headers.get('Authorization')
@@ -26,4 +26,4 @@ def extract_auth_token(authenticated_request):
 
 def decode_token(token):
     payload = jwt.decode(token, SECRET_KEY, 'HS256')
-    return payload['sub']
+    return (payload['sub'], payload['exp'], payload['reset'])
