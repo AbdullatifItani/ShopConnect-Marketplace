@@ -1,14 +1,17 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../AuthContext';
 import { Snackbar, TextField, Button } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
+import ForgotPasswordDialog from '../components/ForgotPasswordDialogue';
 
 function Login() {
   const { token, login } = useContext(AuthContext);
   let [username, setUsername] = useState("");
   let [password, setPassword] = useState("");
   let [invalidSignIn, setInvalidSignIn] = useState(false);
+  let [forgotPass, setForgotPass] = useState(false);
+  let [handlingForgot, setHandlingForgot] = useState(false);
   let navigate = useNavigate();
 
   const handleLogin = async () => {
@@ -19,6 +22,15 @@ function Login() {
     console.log("LOGIN");
     navigate("/home");
   };
+
+  const handleForgot = async () => {
+    setHandlingForgot(true);
+  };
+
+  useEffect(() => {
+    if (!!invalidSignIn)
+      setForgotPass(true);
+  }, [invalidSignIn]);
 
   return (
     <div className="login-container">
@@ -63,6 +75,15 @@ function Login() {
           Login
         </Button>
       </div>
+      { forgotPass &&
+      <div>
+        <a onClick={handleForgot}> <strong><u>Forgot Password?</u></strong></a>
+      </div>}
+
+      <ForgotPasswordDialog 
+        open={Boolean(handlingForgot)}
+        onClose={() => {setHandlingForgot(false);}}
+      />
     </div>
   );
 }
