@@ -11,7 +11,7 @@ def validate_token():
             return jsonify({"message":"No Token Provided"}), 400
         user_id, exp, reset = decode_token(token)
         user = Auth.query.filter_by(id=user_id).first()
-        if not user or datetime.datetime.utcnow() >= exp:
+        if not user or datetime.datetime.utcnow().timestamp() >= exp:
             return jsonify({"message":"Invalid Token"}), 403
 
         username = user.username

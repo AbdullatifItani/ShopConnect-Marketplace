@@ -23,11 +23,9 @@ from .services import register_service, login_service, validate_token_service, f
 def register():
     return register_service.register(db)
 
-
 @app.route('/login', methods=['POST'])
 def login():
     return login_service.login(bcrypt)
-
 
 @app.route('/validate_token', methods=['GET'])
 def validate_token():
@@ -40,6 +38,7 @@ def forgot_pass(email):
 @app.route('/reset_pass', methods=['POST'])
 def reset_pass():
     return reset_pass_service.reset_pass(db, bcrypt)
-    
+
+
 if __name__ == "__main__":
     app.run(port=8080)
