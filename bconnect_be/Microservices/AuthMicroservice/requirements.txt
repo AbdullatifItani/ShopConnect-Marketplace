@@ -26,6 +26,3 @@ Werkzeug==3.0.1
 cryptography==42.0.5
 python-dotenv==1.0.1
 marshmallow-sqlalchemy==1.0.0
-google-auth
-google-auth-oauthlib
-google-auth-httplib2
