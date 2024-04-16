@@ -4,6 +4,9 @@ import { getInfo } from "../apis/get_profile_info_api";
 import { AuthContext } from "../AuthContext";
 import ProfileViewerDialog from "./ProfileViewerDialog";
 
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+toast.configure();
 
 export function ProfileView({viewing, setViewing, profile_pic, setPic}) {
     let { user_id } = useContext(AuthContext);
@@ -20,8 +23,11 @@ export function ProfileView({viewing, setViewing, profile_pic, setPic}) {
     }
 
     const updateProfile = (desc, token) => {updateBio(desc, token)
-        .then(()=>{setBio(desc);
-        fetchInfo()});
+        .then(()=>{
+            setBio(desc);
+            fetchInfo();
+            toast.success("Profile Updated Successfully!");
+        });
     }
 
     useEffect(() => {

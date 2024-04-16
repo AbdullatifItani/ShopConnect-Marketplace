@@ -3,6 +3,10 @@ import { AuthContext } from '../AuthContext';
 import { validateToken } from '../apis/validate_token_api';
 import { NavBar } from '../components/NavBar';
 
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+toast.configure();
+
 function Home() {
   const { token, logout} = useContext(AuthContext);
 
@@ -10,12 +14,12 @@ function Home() {
     logout();
   };
   
-  useEffect(() => {
+  setTimeout(useEffect(() => {
     validateToken(token).then((valid) => {
       if (valid === false)
         handleLogout();
     });
-  }, []);
+  }, []), 100);
 
   return (
     <>

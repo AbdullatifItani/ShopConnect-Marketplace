@@ -25,10 +25,10 @@ function ResetPass() {
     reset_pass_api(token, password)
     .then((response) => {
         if (!response.ok) {
-            toast(`Error ${response.status}: Unable to reset password`);
+            toast.error(`Err. ${response.status}: Unable to reset password`);
             return null;
         }
-        toast(`Success: Password Reset Successfully!`);
+        toast(`Success!`);
         setTimeout(()=>{navigate("/home");}, 500)
         return response.json();
     });

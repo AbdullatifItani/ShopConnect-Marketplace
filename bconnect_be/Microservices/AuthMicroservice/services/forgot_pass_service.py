@@ -2,7 +2,7 @@ from flask import jsonify
 from ..helper_functions import create_token, send_email
 from ..model.auth import Auth
 
-TEMP_FRONTEND_URL = "https://127.0.0.1:3000/"
+TEMP_FRONTEND_URL = "http://127.0.0.1:3000/"
 
 def forgot_pass(email):
     # VERIFY AND FETCH

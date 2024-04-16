@@ -11,6 +11,10 @@ import "./ProfileViewerDialog.css";
 import { sendProfilePicData } from "../apis/send_profile_pic_api";
 import { AuthContext } from "../AuthContext";
 
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+toast.configure();
+
 export default function ProfileViewerDialog({
   open,
   onSubmit,
@@ -37,7 +41,12 @@ export default function ProfileViewerDialog({
     setNewProfilePic(file);
     setProfilePicUrl(URL.createObjectURL(file));
     onUpdateProfilePic(URL.createObjectURL(file));
-    sendProfilePicData(file, user_id, token);
+    sendProfilePicData(file, user_id, token).then(
+      (response) => {
+        if (!response.ok) toast.error(`Err. ${response.status}: Unsuccessful`);
+        else toast.success("Success!");
+      }
+    );
 };
 
   return (

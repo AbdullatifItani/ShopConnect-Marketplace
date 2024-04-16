@@ -14,10 +14,10 @@ function ForgotPasswordDialog({ open, onClose }) {
     forgot_pass_api(email)
     .then((response) => {
         if (!response.ok) {
-            toast(`Error ${response.status}: Failed to send reset link`);
+            toast.error(`Err. ${response.status}: Failed to send reset link`);
             return null;
         }
-        toast(`Success: Reset link has been sent!`);
+        toast.success(`Success!`);
         return response.json();
     }).then((body) => {
         setEmail('');

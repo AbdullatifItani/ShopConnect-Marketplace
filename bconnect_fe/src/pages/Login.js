@@ -5,11 +5,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
 import ForgotPasswordDialog from '../components/ForgotPasswordDialogue';
 
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+toast.configure();
+
 function Login() {
   const { token, login } = useContext(AuthContext);
   let [username, setUsername] = useState("");
   let [password, setPassword] = useState("");
-  let [invalidSignIn, setInvalidSignIn] = useState(false);
   let [forgotPass, setForgotPass] = useState(false);
   let [handlingForgot, setHandlingForgot] = useState(false);
   let navigate = useNavigate();
@@ -17,9 +20,10 @@ function Login() {
   const handleLogin = async () => {
     // Login logic
     console.log(username, password);
-    let resp = await login(username, password, setInvalidSignIn);
+    let resp = await login(username, password, (bool) => {setForgotPass(bool); toast.error("Wrong username or password!")});
     if (!resp) return;
     console.log("LOGIN");
+    toast.success("Success!");
     navigate("/home");
   };
 
@@ -27,23 +31,9 @@ function Login() {
     setHandlingForgot(true);
   };
 
-  useEffect(() => {
-    if (!!invalidSignIn)
-      setForgotPass(true);
-  }, [invalidSignIn]);
-
   return (
     <div className="login-container">
       <div className="login-form">
-        <Snackbar
-          className="snackbar"
-          elevation={6}
-          variant="filled"
-          open={invalidSignIn}
-          autoHideDuration={2000}
-          onClose={() => setInvalidSignIn(false)}
-          message="Wrong username or password!"
-        />
         <h2>Login</h2>
         <div className="form-item">
           <TextField

@@ -6,6 +6,10 @@ import { AuthContext } from '../AuthContext';
 import { fetchProfilePic } from '../apis/fetch_profile_pic_api';
 import { ProfileView } from './ProfileView';
 
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+toast.configure();
+
 function ProfileDropdown({ onLogout }) {
   const { token, user_id } = useContext(AuthContext);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -24,6 +28,7 @@ function ProfileDropdown({ onLogout }) {
   const handleLogout = () => {
     onLogout();
     handleClose();
+    toast.success("Logged Out Successfully!");
   };
 
   const handleViewProfile = () => {
