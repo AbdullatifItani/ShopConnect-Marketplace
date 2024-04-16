@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Snackbar, TextField, Button } from '@mui/material';
 import './ResetPass.css'; // Create a ResetPass.css file with similar styles to Login.css
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { reset_pass_api } from '../apis/reset_pass_api';
 toast.configure();
 
 function ResetPass() {
@@ -12,6 +13,7 @@ function ResetPass() {
   const [token, setToken] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  let navigate = useNavigate();
 
   const handleSubmit = () => {
     // Password validation logic
@@ -20,7 +22,16 @@ function ResetPass() {
       return;
     }
     // Further submission logic here
-
+    reset_pass_api(token, password)
+    .then((response) => {
+        if (!response.ok) {
+            toast(`Error ${response.status}: Unable to reset password`);
+            return null;
+        }
+        toast(`Success: Password Reset Successfully!`);
+        setTimeout(()=>{navigate("/home");}, 500)
+        return response.json();
+    });
   };
 
   useEffect(() => {

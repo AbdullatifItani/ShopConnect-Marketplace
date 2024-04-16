@@ -1,7 +1,7 @@
 import { SERVER_URL_AUTH } from "../config";
 
 export function reset_pass_api(userToken, password) {
-    return fetch(`${SERVER_URL_AUTH}/login`, {
+    return fetch(`${SERVER_URL_AUTH}/reset_pass`, {
     method: "POST",
     headers: {
         "Content-Type": "application/json",
@@ -10,5 +10,5 @@ export function reset_pass_api(userToken, password) {
     body: JSON.stringify({
         password: password,
         }),
-    })
+    });
 }
