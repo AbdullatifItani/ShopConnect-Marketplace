@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button } from '@mui/material';
-import './ForgotPasswordDialogue.css'; // Import the CSS file
+import './ForgotPasswordDialogue.css';
 import { forgot_pass_api } from '../apis/forgot_pass_api';
 
 import { toast } from "react-toastify";

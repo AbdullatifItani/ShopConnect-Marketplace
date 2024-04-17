@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Snackbar, TextField, Button } from '@mui/material';
-import './ResetPass.css'; // Create a ResetPass.css file with similar styles to Login.css
+import { TextField, Button } from '@mui/material';
+import './ResetPass.css'; 
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -19,12 +19,12 @@ function ResetPass() {
   let navigate = useNavigate();
 
   const handleSubmit = () => {
-    // Password validation logic
+    
     if (password !== confirmPassword) {
       toast.error("Passwords do not match!")
       return;
     }
-    // Further submission logic here
+
     reset_pass_api(token, password)
     .then((response) => {
         if (!response.ok) {

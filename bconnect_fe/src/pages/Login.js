@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../AuthContext';
-import { Snackbar, TextField, Button } from '@mui/material';
+import { TextField, Button } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
 import ForgotPasswordDialog from '../components/ForgotPasswordDialogue';
@@ -18,9 +18,8 @@ function Login() {
   let navigate = useNavigate();
 
   const handleLogin = async () => {
-    // Login logic
     console.log(username, password);
-    let resp = await login(username, password, (bool) => {setForgotPass(bool); toast.error("Wrong username or password!")});
+    let resp = await login(username, password, ((bool) => {setForgotPass(bool); toast.error("Wrong username or password!")}));
     if (!resp) return;
     console.log("LOGIN");
     toast("Logged In!");

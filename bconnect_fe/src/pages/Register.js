@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../AuthContext';
 import { register_api } from '../apis/register_api';
-import { Button, Snackbar, TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 import { toast } from "react-toastify";
@@ -17,15 +17,17 @@ function Register() {
     let navigate = useNavigate();
 
     const handleRegister = () => {
-        // Implement registration logic
         register_api(username, email, password)
-        .then((response) => {
-            if (!response.ok)
-                toast.error(`Err. ${response.status}: ${response.json().message}`);
+        .then(async (response) => {
+            var resp_json = await response.json();
+            if (!response.ok) {
+                toast.error(`Err. ${response.status}: ${resp_json.message}`);
+                return null;
+            }   
             toast("Registered Successfully!");
-            login(username, password);
+            login(username, password, (bool)=>{});
             navigate("/home");
-            return response.json();
+            return resp_json
         });
     };
 
