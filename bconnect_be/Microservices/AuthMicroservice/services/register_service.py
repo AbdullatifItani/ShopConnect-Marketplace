@@ -18,15 +18,14 @@ def register(db):
         
         auth = Auth(username, email, password)
         db.session.add(auth)
-        
+        db.session.commit()
         user_id = auth.id
         
         response = requests.post("http://localhost:8082/createUserInfo", json={'user_id': user_id, 'username': username})
         
         if response.status_code != 201:
             db.session.rollback()
-            return jsonify(response.json), response.status_code
-        db.session.commit()
+            return jsonify(response.json()), response.status_code
         return jsonify(auth_schema.dump(auth)), 201
     
     except Exception as e:

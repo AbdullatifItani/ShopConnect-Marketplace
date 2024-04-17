@@ -17,13 +17,15 @@ function Login() {
   let [handlingForgot, setHandlingForgot] = useState(false);
   let navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleLogin = () => {
     console.log(username, password);
-    let resp = await login(username, password, ((bool) => {setForgotPass(bool); toast.error("Wrong username or password!")}));
-    if (!resp) return;
-    console.log("LOGIN");
-    toast("Logged In!");
-    navigate("/home");
+    login(username, password, ((bool) => {setForgotPass(bool); toast.error("Wrong username or password!")}))
+    .then((resp) => {
+      if (!resp) return;
+      console.log("LOGIN");
+      toast("Logged In!");
+      navigate("/home");
+    });
   };
 
   const handleForgot = async () => {
