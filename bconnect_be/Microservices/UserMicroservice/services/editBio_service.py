@@ -22,11 +22,11 @@ def editBio(db):
     try:
         user = User.query.get(user_id)
         if not user:
-            abort(404)
+            return jsonify({"message" : "User not found"}), 404
         
         user.bio = request.json["bio"]
         db.session.commit()
-        return jsonify({"message": "Bio updated successfully."}), 201
+        return jsonify({"message": "Bio updated successfully"}), 201
     except Exception as e:
         db.session.rollback()
-        abort(500)
+        return jsonify({"message" : "Internal Server Error"}), 500

@@ -1,4 +1,4 @@
-from flask import abort, request, jsonify
+from flask import request, jsonify
 import requests
 from ..helper_functions import extract_auth_token
 from ..model.user import User
@@ -32,6 +32,6 @@ def uploadProfilePic(db):
         db.session.commit()
         return jsonify({"message": "Profile picture updated successfully."}), 201
     except Exception as e:
-        print(e)
         db.session.rollback()
-        abort(500)
+        return jsonify({"message": "Internal Server Error"}), 500
+    

@@ -7,13 +7,17 @@ def register(db):
         username = request.json["username"]
         email = request.json["email"]
         password = request.json["password"]
-        
+    except KeyError:
+        return jsonify({"message": "Invalid Credentials"}), 400
+    try:
         if Auth.query.filter_by(username=username).first():
-            return jsonify({"message": "Username taken"}), 400
+            return jsonify({"message": "Username already taken"}), 409
+        
+        if Auth.query.filter_by(email=email).first():
+            return jsonify({"message": "Email already taken"}), 409
         
         auth = Auth(username, email, password)
         db.session.add(auth)
-        db.session.commit()
         
         user_id = auth.id
         
@@ -21,9 +25,10 @@ def register(db):
         
         if response.status_code != 201:
             db.session.rollback()
-            return jsonify({"message": "Failed to create user information in the other microservice"}), 400
-        
+            return jsonify(response.json), response.status_code
+        db.session.commit()
         return jsonify(auth_schema.dump(auth)), 201
+    
     except Exception as e:
         db.session.rollback()
-        return jsonify({"message": str(e)}), 400
+        return jsonify({"message": "Internal Server Error"}), 500

@@ -1,4 +1,4 @@
-from flask import request, abort, jsonify
+from flask import request, jsonify
 from ..helper_functions import extract_auth_token, decode_token
 from ..model.auth import Auth, auth_schema
 import datetime

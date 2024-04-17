@@ -1,8 +1,8 @@
 import { SERVER_URL_AUTH } from "../config";
 
-export function validateToken(userToken){
+export function validateToken(userToken, isReset=false){
     console.log(`Bearer ${userToken}`);
-    return fetch(`${SERVER_URL_AUTH}/validate_token`, {
+    return fetch(`${SERVER_URL_AUTH}/validate_token${isReset ? "?checkReset=true" : ""}`, {
       method: "GET",
       headers: {
           "Content-Type": "application/json",

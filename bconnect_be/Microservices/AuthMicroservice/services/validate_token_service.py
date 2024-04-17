@@ -1,9 +1,11 @@
 from ..helper_functions import extract_auth_token, decode_token
-from flask import abort, request, jsonify
+from flask import request, jsonify
 from ..model.auth import Auth
 import datetime
 
 def validate_token():
+    checkReset = request.args.get('checkReset') == "true"
+    print(checkReset)
     try:
         token = extract_auth_token(request)
         
@@ -11,10 +13,11 @@ def validate_token():
             return jsonify({"message":"No Token Provided"}), 400
         user_id, exp, reset = decode_token(token)
         user = Auth.query.filter_by(id=user_id).first()
-        if not user or datetime.datetime.utcnow().timestamp() >= exp:
+        if not user or (checkReset != reset) or datetime.datetime.utcnow().timestamp() >= exp:
             return jsonify({"message":"Invalid Token"}), 403
 
-        username = user.username
         return jsonify({"user_id": user_id}), 200
     except Exception as e:
         return jsonify({"message": "Invalid Token"}), 403
+    
+    

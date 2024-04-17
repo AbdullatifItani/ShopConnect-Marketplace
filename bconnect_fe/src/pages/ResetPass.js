@@ -6,11 +6,14 @@ import './ResetPass.css'; // Create a ResetPass.css file with similar styles to 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { reset_pass_api } from '../apis/reset_pass_api';
+import { validateToken } from '../apis/validate_token_api';
 toast.configure();
 
 function ResetPass() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [token, setToken] = useState("");
+  const [tokenVerified, setTokenVerified] = useState(false);
+  const [done, setDone] = useState(false);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   let navigate = useNavigate();
@@ -18,7 +21,7 @@ function ResetPass() {
   const handleSubmit = () => {
     // Password validation logic
     if (password !== confirmPassword) {
-      toast("Passwords do not match!")
+      toast.error("Passwords do not match!")
       return;
     }
     // Further submission logic here
@@ -28,17 +31,30 @@ function ResetPass() {
             toast.error(`Err. ${response.status}: Unable to reset password`);
             return null;
         }
-        toast(`Success!`);
-        setTimeout(()=>{navigate("/home");}, 500)
+        toast(`Password reset successful!`);
+        navigate("/home");
         return response.json();
     });
   };
 
   useEffect(() => {
     setToken(searchParams.get("reset_token"));
+    setTimeout(()=>{setDone(true);}, 500);
   }, [searchParams]);
 
-  return (
+  useEffect(() => {
+    if (token == "" || !!done) return;
+    validateToken(token, true).then((response) => {
+        if (response != false) setTokenVerified(true);
+        setDone(true);
+    })
+  }, [token]);
+  
+  return ( <>
+    {
+        (done && !tokenVerified) && <><br/><br/><h1>SHOP CONNECT</h1><h2 style={{"textAlign":"center"}}>Invalid Link!</h2></>
+    }
+    { tokenVerified &&
     <div className="reset-pass-container">
         <h1>SHOP CONNECT</h1>
       <div className="reset-pass-form">
@@ -70,7 +86,8 @@ function ResetPass() {
         </Button>
       </div>
     </div>
-  );
+    }</>
+);
 }
 
 export default ResetPass;

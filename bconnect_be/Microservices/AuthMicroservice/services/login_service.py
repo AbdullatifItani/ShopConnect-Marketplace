@@ -1,12 +1,11 @@
-from flask import request, abort, jsonify
+from flask import request, jsonify
 from ..helper_functions import create_token
 from ..model.auth import Auth
-import cryptography
 
 def login(bcrypt):
     try:
         if "username" not in request.json or "password" not in request.json:
-            abort(400)
+            return jsonify({"message":"Invalid Credentials"}), 400
 
         username = request.json["username"]
         password = request.json["password"]
@@ -22,4 +21,4 @@ def login(bcrypt):
         
         return jsonify({"token": token, "user_id": user.id}), 200
     except Exception as e:
-        return jsonify({"message": str(e)}), 400
+        return jsonify({"message": "Internal Server Error"}), 500

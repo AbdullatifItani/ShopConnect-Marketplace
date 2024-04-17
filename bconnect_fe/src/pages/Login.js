@@ -23,7 +23,7 @@ function Login() {
     let resp = await login(username, password, (bool) => {setForgotPass(bool); toast.error("Wrong username or password!")});
     if (!resp) return;
     console.log("LOGIN");
-    toast.success("Success!");
+    toast("Logged In!");
     navigate("/home");
   };
 
