@@ -12,7 +12,7 @@ db = SQLAlchemy(app)
 ma = Marshmallow(app)
 
 
-from .services import editBio_service, getProfilePic_service, getUserInfo_service, createUserInfo_service, uploadProfilePic_service
+from .services import editBio_service, getProfilePic_service, getUserInfo_service, createUserInfo_service, uploadProfilePic_service, upload_id_service, request_make_seller_service, get_seller_requests_service, get_identification_service, get_seller_terms_service, agree_seller_terms_service
 
 
 @app.route('/getUserInfo/<int:user_id>', methods=['GET'])
@@ -38,6 +38,29 @@ def editBioDesc():
 def uploadProfilePic():
     return uploadProfilePic_service.uploadProfilePic(db)
 
-    
+@app.route('/uploadID', methods=['POST'])
+def uploadID():
+    return upload_id_service.uploadID(db)
+
+@app.route('/request-make-seller', methods=['POST'])
+def request_make_seller():
+    return request_make_seller_service.request_make_seller(db)
+
+@app.route('/get_identification/<user_id>', methods=['GET'])
+def get_identification(user_id):
+    return get_identification_service.get_identification(user_id)
+
+@app.route('/get_seller_requests', methods=['GET'])
+def get_seller_requests():
+    return get_seller_requests_service.get_seller_requests()
+
+@app.route('/seller_terms', methods=['GET'])
+def get_seller_terms():
+    return get_seller_terms_service.get_seller_terms(db)
+
+@app.route('/seller_terms', methods=['POST'])
+def agree_seller_terms():
+    return agree_seller_terms_service.agree_seller_terms(db)
+
 if __name__ == "__main__":
     app.run(port=8082)

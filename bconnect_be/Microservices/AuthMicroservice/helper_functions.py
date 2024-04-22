@@ -11,13 +11,17 @@ config = dotenv_values(".env")
 
 SECRET_KEY = "b'|\xe7\xbfU3`\xc4\xec\xa7\xa9zf:}\xb5\xc7\xb9\x139^3@Dv'"
 
-def create_token(user_id, delay=[4], isReset=False):
+from .permissions import roles
+
+def create_token(user_id, delay=[4], isReset=False, role = 'buyer'):
+    if role not in roles: raise "Error: invalid role"
     payload = {
         'exp': datetime.datetime.utcnow() + datetime.timedelta(*delay),
         'iat': datetime.datetime.utcnow(),
         'sub': user_id,
         'reset': isReset
     }
+    if not isReset: payload['role'] = role
     return jwt.encode(
         payload,
         SECRET_KEY,
@@ -34,7 +38,8 @@ def extract_auth_token(authenticated_request):
 
 def decode_token(token):
     payload = jwt.decode(token, SECRET_KEY, 'HS256')
-    return (payload['sub'], payload['exp'], payload['reset'])
+    return payload
+    # return (payload['sub'], payload['exp'], payload['reset'])
 
 def send_email(email_to, subject, template, vars={}):
     msg = MIMEMultipart('alternative')

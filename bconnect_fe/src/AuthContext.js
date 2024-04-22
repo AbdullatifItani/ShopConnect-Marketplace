@@ -3,6 +3,10 @@ import { getUserToken,saveUserToken, clearUserToken } from "./localStorage";
 import { login_api } from "./apis/login_api.js";
 import { validateToken } from './apis/validate_token_api.js';
 
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+toast.configure();
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -12,7 +16,10 @@ export const AuthProvider = ({ children }) => {
   const login = (username, password, setInvalidSignIn) => {
     // Login logic
     return login_api(username, password).then((response) => {
-        if (response.status === 403){
+        if (response.status === 500){
+            toast.error("Err 500: Unable to login!")
+            return null;
+        } else if (!response.ok) {
             setInvalidSignIn(true);
             return null;
         }

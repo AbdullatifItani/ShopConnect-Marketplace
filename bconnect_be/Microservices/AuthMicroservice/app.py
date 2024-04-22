@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_marshmallow import Marshmallow
@@ -13,11 +13,8 @@ db = SQLAlchemy(app)
 ma = Marshmallow(app)
 bcrypt = Bcrypt(app)
 
-from .model.auth import Auth
 
-
-from .services import register_service, login_service, validate_token_service, forgot_pass_service, reset_pass_service
-
+from .services import register_service, login_service, validate_token_service, forgot_pass_service, reset_pass_service, get_permissions_service
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -39,6 +36,9 @@ def forgot_pass(email):
 def reset_pass():
     return reset_pass_service.reset_pass(db, bcrypt)
 
+@app.route('/permissions', methods=['GET'])
+def get_persmissions():
+    return get_permissions_service.get_permissions()
 
 if __name__ == "__main__":
     app.run(port=8080)

@@ -5,18 +5,19 @@ import datetime
 
 def validate_token():
     checkReset = request.args.get('checkReset') == "true"
-    print(checkReset)
+    
     try:
         token = extract_auth_token(request)
         
         if not token or token == "null":
             return jsonify({"message":"No Token Provided"}), 400
-        user_id, exp, reset = decode_token(token)
-        user = Auth.query.filter_by(id=user_id).first()
-        if not user or (checkReset != reset) or datetime.datetime.utcnow().timestamp() >= exp:
+        payload = decode_token(token)
+        print(payload)
+        user = Auth.query.filter_by(id=payload.get('sub', '')).first()
+        if not user or (checkReset != payload.get('reset', '')) or (not payload.get('reset', '') and user.role != payload.get("role", "")) or datetime.datetime.utcnow().timestamp() >= payload.get('exp', ''):
             return jsonify({"message":"Invalid Token"}), 403
 
-        return jsonify({"user_id": user_id}), 200
+        return jsonify({"user_id": payload.get('sub', '')}), 200
     except Exception as e:
         return jsonify({"message": "Invalid Token"}), 403
     

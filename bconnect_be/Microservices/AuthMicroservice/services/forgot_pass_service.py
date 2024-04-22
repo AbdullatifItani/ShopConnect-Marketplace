@@ -15,7 +15,7 @@ def forgot_pass(email):
 
     # MAKE RESET TOKEN
     try:
-        token = create_token(user.id, [0, 300], True)
+        token = create_token(user.id, [0, 300], isReset=True)
     except:
         return jsonify({"message":"Internal Server Error"}), 500
     

@@ -9,10 +9,10 @@ def reset_pass(db, bcrypt):
         token = extract_auth_token(request)
         if not token or token == "null":
             return jsonify({"message":"No Token Provided"}), 400
-        user_id, exp, reset = decode_token(token)
+        payload = decode_token(token)
         
-        user = Auth.query.filter_by(id=user_id).first()
-        if not (user and reset) or datetime.datetime.utcnow().timestamp() >= exp:
+        user = Auth.query.filter_by(id=payload.get("sub", "")).first()
+        if not (user and payload.get("reset", "")) or datetime.datetime.utcnow().timestamp() >= payload.get("exp", ""):
             return jsonify({"message":"Invalid Token"}), 403
         
     except Exception as e:

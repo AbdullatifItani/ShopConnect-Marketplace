@@ -3,7 +3,7 @@ from ..model.user import User, user_schema
 
 def createUserInfo(db):
     try:
-        user_id = request.json.get("user_id", "")
+        user_id = request.json.get("user_id", "") # TODO: VALIDATE THAT user_id EXISTS IN AUTH
         username = request.json.get("username", "")
 
         if not user_id or not username:
