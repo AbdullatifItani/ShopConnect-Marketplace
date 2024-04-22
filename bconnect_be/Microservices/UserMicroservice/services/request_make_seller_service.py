@@ -25,6 +25,9 @@ def request_make_seller(db):
     except:
         return jsonify({"message" : "Not Found"}), 404
     
+    if not user.agree_seller_terms:
+        return jsonify({"message" : "Must agree to seller terms and policies"}), 401
+    
     try:
         user.request_make_seller = True
         db.session.commit()
