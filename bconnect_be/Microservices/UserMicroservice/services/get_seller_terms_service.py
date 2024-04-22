@@ -5,7 +5,7 @@ from ..model.user import User
 
 def get_seller_terms():
     try:
-        with open("../terms_and_policies.txt", 'r') as file:
+        with open("terms_and_policies.txt", 'r') as file:
             terms = file.read().replace('\n', '<br>')
         return jsonify({"terms": terms}), 200
     except Exception as e:

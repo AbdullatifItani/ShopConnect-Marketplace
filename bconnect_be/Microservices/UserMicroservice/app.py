@@ -56,7 +56,7 @@ def get_seller_requests():
 
 @app.route('/seller_terms', methods=['GET'])
 def get_seller_terms():
-    return get_seller_terms_service.get_seller_terms(db)
+    return get_seller_terms_service.get_seller_terms()
 
 @app.route('/seller_terms', methods=['POST'])
 def agree_seller_terms():
