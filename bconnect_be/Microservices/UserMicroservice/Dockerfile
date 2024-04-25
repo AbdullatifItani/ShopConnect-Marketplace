@@ -10,6 +10,7 @@ WORKDIR /app
 
 # Copy the dependencies file to the working directory
 COPY requirements.txt .
+COPY db_script.py .
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
@@ -22,4 +23,4 @@ COPY . .
 EXPOSE 8082
 
 # Run the application
-CMD ["python", "app.py"]
+CMD ["python", "app.py", "--port", "8082"]
