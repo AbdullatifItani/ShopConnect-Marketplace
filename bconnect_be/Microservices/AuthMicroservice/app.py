@@ -14,7 +14,7 @@ ma = Marshmallow(app)
 bcrypt = Bcrypt(app)
 
 
-from .services import register_service, login_service, validate_token_service, forgot_pass_service, reset_pass_service, get_permissions_service
+from .services import register_service, login_service, validate_token_service, forgot_pass_service, reset_pass_service, get_permissions_service, make_seller_service
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -40,5 +40,10 @@ def reset_pass():
 def get_persmissions():
     return get_permissions_service.get_permissions()
 
+@app.route('/make-seller/<user_id>', methods=["POST"])
+def make_seller(user_id):
+    return make_seller_service.make_seller(user_id, db);
+
 if __name__ == "__main__":
     app.run(port=8080)
+    

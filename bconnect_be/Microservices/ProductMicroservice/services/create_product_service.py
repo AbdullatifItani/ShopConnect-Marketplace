@@ -4,20 +4,20 @@ import requests, base64
 from ..model.product import Product, product_schema
 
 from ..helper_functions import extract_auth_token
-
+import os
 def create_product(db):
     token = extract_auth_token(request)
     try:
-        validate = requests.get("http://localhost:8080/validate_token", headers = {'Authorization': f'Bearer {token}'})
+        validate = requests.get(f"{os.environ.get('AUTH_URL', 'http://localhost:8080')}/validate_token", headers = {'Authorization': f'Bearer {token}'})
         if validate.status_code != 200: return jsonify({"message":"Invalid Token"}), 403
         user_id = validate.json()["user_id"]
-        response = requests.get("http://localhost:8080/permissions", headers = {'Authorization': f'Bearer {token}'})
+        response = requests.get(f"{os.environ.get('AUTH_URL', 'http://localhost:8080')}/permissions", headers = {'Authorization': f'Bearer {token}'})
         print(create_product.__name__, response.json())
         if create_product.__name__ not in response.json().get("permissions", []): return jsonify({"message":"Unauthorized Request"}), 401
     except Exception as e:
         return jsonify({"message":"Unauthorized Request"}), 401
     
-    body = request.form
+    body = dict(request.form)
     for field in ("name", "description", "price"):
         if field not in body:
             return jsonify({"message":"Bad Request"}), 400

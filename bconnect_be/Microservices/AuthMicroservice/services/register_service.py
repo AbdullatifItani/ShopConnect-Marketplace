@@ -1,7 +1,7 @@
 from flask import request, jsonify
 import requests
 from ..model.auth import Auth, auth_schema
-
+import os
 def register(db):
     try:
         username = request.json["username"]
@@ -21,7 +21,7 @@ def register(db):
         db.session.commit()
         user_id = auth.id
         
-        response = requests.post("http://localhost:8082/createUserInfo", json={'user_id': user_id, 'username': username})
+        response = requests.post(f"{os.environ.get('USER_URL', 'http://127.0.0.1:8082')}/createUserInfo", json={'user_id': user_id, 'username': username})
         
         if response.status_code != 201:
             db.session.rollback()

@@ -8,12 +8,14 @@ import { ProfileView } from './ProfileView';
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from 'react-router-dom';
 toast.configure();
 
 function ProfileDropdown({ onLogout }) {
-  const { token, user_id } = useContext(AuthContext);
+  const { token, user_id, role } = useContext(AuthContext);
   const [anchorEl, setAnchorEl] = useState(null);
   const [viewingProfile, setViewingProfile] = useState(null);
+  let navigate = useNavigate();
   
   let [initialProfilePic, setProfilePic] = useState(null);
 
@@ -35,6 +37,19 @@ function ProfileDropdown({ onLogout }) {
     setViewingProfile(true);
   }
 
+  const handleAdminControls = () => {
+    navigate("/admin");
+  }
+
+
+  const handleSettings = () => {
+
+  }
+
+  const handlePaymentHistory = () => {
+
+  }
+
   useEffect(() => {
     fetchProfilePic(user_id, setProfilePic);
   }, [user_id])
@@ -47,7 +62,10 @@ function ProfileDropdown({ onLogout }) {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
+        {role === "admin" && <MenuItem onClick={handleAdminControls}>Admin Controls</MenuItem>}
         <MenuItem onClick={handleViewProfile}>View Profile Info</MenuItem>
+        <MenuItem onClick={handleSettings}>Settings</MenuItem>
+        {(role === "buyer" || role === "seller") && <MenuItem onClick={handlePaymentHistory}>Payment History</MenuItem>}
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
         
       </Menu>

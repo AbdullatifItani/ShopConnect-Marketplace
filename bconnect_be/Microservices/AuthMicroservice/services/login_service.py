@@ -19,7 +19,6 @@ def login(bcrypt):
         
         token = create_token(user.id, role=user.role)
         
-        return jsonify({"token": token, "user_id": user.id}), 200
+        return jsonify({"token": token, "user_id": user.id, "role":user.role}), 200
     except Exception as e:
-        print(e)
         return jsonify({"message": "Internal Server Error"}), 500

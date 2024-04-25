@@ -3,11 +3,11 @@ import requests
 from ..helper_functions import extract_auth_token
 from ..model.user import User
 import base64
-
+import os
 def uploadProfilePic(db):
     token = extract_auth_token(request)
     try:
-        response = requests.get("http://localhost:8080/validate_token", headers = {'Authorization': f'Bearer {token}'})
+        response = requests.get(f"{os.environ.get('AUTH_URL', 'http://localhost:8080')}/validate_token", headers = {'Authorization': f'Bearer {token}'})
         user_id = response.json().get("user_id")
     except requests.RequestException as e:
         return jsonify({"message" : "Unauthorized Request"}), 403

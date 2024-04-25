@@ -28,7 +28,6 @@ def forgot_pass(email):
     _templateVars = {"[username]":user.username, "[reset_link]":reset_link, "[support_email]":'shop.connect.reply@gmail.com'}
     try:
         isSent, statCode = send_email(email, _subject, _template, _templateVars)
-        print(isSent, statCode)
     except:
         return jsonify({"message":"Internal Server Error"}), 500
     

@@ -17,6 +17,7 @@ export function ProfileView({viewing, setViewing, profile_pic, setPic}) {
         console.log(user_id);
         getInfo(user_id)
         .then(data => {
+            if (!data) return;
             setUsername(data["username"] !== null ? data["username"] : "");
             setBio(data["bio"] !== null ? data["bio"] : "");
         });

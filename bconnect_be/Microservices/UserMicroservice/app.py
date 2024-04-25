@@ -4,15 +4,13 @@ from flask_cors import CORS
 from flask_marshmallow import Marshmallow
 from .db_config import DB_CONFIG
 
-
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_CONFIG
 CORS(app)
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 
-
-from .services import editBio_service, getProfilePic_service, getUserInfo_service, createUserInfo_service, uploadProfilePic_service, upload_id_service, request_make_seller_service, get_seller_requests_service, get_identification_service, get_seller_terms_service, agree_seller_terms_service
+from .services import editBio_service, getProfilePic_service, getUserInfo_service, createUserInfo_service, uploadProfilePic_service, upload_id_service, request_make_seller_service, get_seller_requests_service, get_identification_service, get_seller_terms_service, agree_seller_terms_service, dismiss_request_service
 
 
 @app.route('/getUserInfo/<int:user_id>', methods=['GET'])
@@ -45,6 +43,10 @@ def uploadID():
 @app.route('/request-make-seller', methods=['POST'])
 def request_make_seller():
     return request_make_seller_service.request_make_seller(db)
+
+@app.route('/dismiss-request/<user_id>', methods=['POST'])
+def dismiss_request(user_id):
+    return dismiss_request_service.dismiss_request(user_id, db)
 
 @app.route('/get_identification/<user_id>', methods=['GET'])
 def get_identification(user_id):

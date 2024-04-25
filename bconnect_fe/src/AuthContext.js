@@ -12,6 +12,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(getUserToken());
   const [user_id, setUser] = useState(null);
+  const [role, setRole] = useState(null);
 
   const login = (username, password, setInvalidSignIn) => {
     // Login logic
@@ -30,6 +31,7 @@ export const AuthProvider = ({ children }) => {
         saveUserToken(body.token);
         setToken(body.token);
         setUser(body.user_id);
+        setRole(body.role);
         return true;
     });
   };
@@ -39,19 +41,22 @@ export const AuthProvider = ({ children }) => {
     saveUserToken("");
     setToken(null);
     setUser(null);
+    setRole(null);
   };
 
   useEffect(() => {
       validateToken(token).then((valid) => {
-        if (valid === false)
+        if (valid === false){
           logout();
-        else 
-          setUser(valid);
+        }else {
+          setUser(valid.user_id);
+          setRole(valid.role);
+        }
       })
-  }, [])
+  }, [token])
 
   return (
-    <AuthContext.Provider value={{ token, user_id, login, logout }}>
+    <AuthContext.Provider value={{ token, user_id, role, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

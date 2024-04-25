@@ -2,14 +2,14 @@ from flask import request, jsonify
 import requests
 from ..helper_functions import extract_auth_token
 from ..model.user import User
-
+import os
 def agree_seller_terms(db):
     token = extract_auth_token(request)
     try:
-        response = requests.get("http://localhost:8080/validate_token", headers = {'Authorization': f'Bearer {token}'})
+        response = requests.get(f"{os.environ.get('AUTH_URL', 'http://localhost:8080')}/validate_token", headers = {'Authorization': f'Bearer {token}'})
         if response.status_code != 200: return jsonify({"message":"Invalid Token"}), 403
         user_id = response.json()["user_id"]
-        response = requests.get("http://localhost:8080/permissions", headers = {'Authorization': f'Bearer {token}'})
+        response = requests.get(f"{os.environ.get('AUTH_URL', 'http://localhost:8080')}/permissions", headers = {'Authorization': f'Bearer {token}'})
         
         if agree_seller_terms.__name__ not in response.json().get("permissions", []): return jsonify({"message":"Unauthorized Request"}), 401
     except requests.RequestException as e:

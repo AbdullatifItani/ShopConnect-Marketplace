@@ -23,4 +23,4 @@ def levDistance(str1, str2):
     return matrix[len(str1)][len(str2)]
 
 def suggest(dic, word, distance, maxSuggestions=5):
-   return [i[1] for i in sorted([(distance(word1, word), word1) for word1 in dic], key=lambda x:(x[0], x[1].name))[:maxSuggestions]]
+   return [i[1] for i in sorted([(distance(word1, word), word1) for word1 in dic if distance(word1, word) < 5], key=lambda x:(x[0], x[1].name))[:maxSuggestions]]

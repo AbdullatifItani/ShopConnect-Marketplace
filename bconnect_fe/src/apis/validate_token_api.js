@@ -1,7 +1,7 @@
 import { SERVER_URL_AUTH } from "../config";
 
 export function validateToken(userToken, isReset=false){
-    console.log(`Bearer ${userToken}`);
+    
     return fetch(`${SERVER_URL_AUTH}/validate_token${isReset ? "?checkReset=true" : ""}`, {
       method: "GET",
       headers: {
@@ -16,6 +16,6 @@ export function validateToken(userToken, isReset=false){
     })
     .then((body) => {
         if (!body) return false;
-        return body.user_id;
+        return body;
     });
 }
